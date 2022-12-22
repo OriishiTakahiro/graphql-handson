@@ -1,0 +1,24 @@
+type Game {
+  gameID: ID!
+  gameTitle: String!
+  about: String!
+  createdAt: String
+}
+
+type Post {
+  postID: ID
+  gameId: ID!
+  score: Int!
+  review: String
+  author: String
+  createdAt: String
+}
+
+type Query {
+  findAllGames: [Game]
+  findPosts(gameID: String): [Post]
+}
+
+type Mutation {
+  createPost(gameID: String, score: Int, review: String, author: String): String
+}
