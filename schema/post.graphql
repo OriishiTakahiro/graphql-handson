@@ -5,6 +5,14 @@ type Game {
   createdAt: String
 }
 
+type GameWithPosts {
+  gameID: ID!
+  gameTitle: String!
+  about: String!
+  createdAt: String
+  posts: [Post]
+}
+
 type Post {
   postID: ID
   gameId: ID!
@@ -17,6 +25,7 @@ type Post {
 type Query {
   findAllGames: [Game]
   findPosts(gameID: String): [Post]
+  findAllGameWithPosts: [GameWithPosts]
 }
 
 type Mutation {

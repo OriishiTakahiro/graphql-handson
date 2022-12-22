@@ -43,3 +43,19 @@ query {
   }
 }
 ```
+
+typeをネストすることも可能
+
+
+```graphql
+query {
+  findAllGameWithPosts{
+    gameTitle
+    about
+    posts {
+      score
+      review
+    }
+  }
+}
+```

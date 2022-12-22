@@ -1,13 +1,5 @@
 import { Pool } from "pg";
-import {
-  Kysely,
-  PostgresDialect,
-  Generated,
-  ColumnType,
-  Selectable,
-  Insertable,
-  Updateable,
-} from "kysely";
+import { Kysely, PostgresDialect } from "kysely";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -57,6 +49,29 @@ const resolvers = {
         .where("posts.gameID", "=", gameID)
         .execute();
       return posts;
+    },
+    findAllGameWithPosts: async () => {
+      const games = await db.selectFrom("games").selectAll().execute();
+      const posts = await Promise.all(
+        games
+          .filter((g) => g.gameID)
+          .map((g) =>
+            db
+              .selectFrom("posts")
+              .selectAll()
+              .where("posts.gameID", "=", g.gameID as string)
+              .execute()
+          )
+      );
+
+      const gameWithPosts = games.map((g) => {
+        const correspondPosts = posts.find(
+          (p) => p.length > 0 && p[0].gameID === g.gameID
+        );
+        return { ...g, posts: correspondPosts };
+      });
+
+      return gameWithPosts;
     },
   },
   Mutation: {
